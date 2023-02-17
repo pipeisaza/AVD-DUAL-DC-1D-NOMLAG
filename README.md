@@ -1,4 +1,4 @@
-# AVD example for a single data center using L3LS
+# AVD example for a dual data center using L3LS with no mlag and single domain
 
 ## Introduction
 
