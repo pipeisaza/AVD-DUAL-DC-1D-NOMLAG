@@ -1,0 +1,21 @@
+---
+
+servers:
+  dc2-server01:
+    rack: Rack-dc2A
+    adapters:
+      - type: nic
+        server_ports: [Eth0]
+        switch_ports: [Ethernet8]
+        switches: [DC2-LEAF1A]
+        profile: TENANT_A_WEB_Zone
+
+  dc2-server02:
+    rack: Rack-dc2B
+    adapters:
+      - type: nic
+        server_ports: [Eth1]
+        switch_ports: [Ethernet8]
+        switches: [DC2-LEAF1B]
+        profile: TENANT_A_WEB_Zone
+

@@ -1,0 +1,19 @@
+---
+
+- name: Collect commands
+  hosts: FABRIC
+  connection: local
+  gather_facts: false
+  collections:
+    - arista.avd
+
+  tasks:
+    - name: include snapshot variables
+      ansible.builtin.include_vars:
+        file: '{{ inventory_dir }}/snapshots/snapshots-commands.yml'
+        
+    - name: Collect commands
+      import_role:
+        name: eos_snapshot
+
+

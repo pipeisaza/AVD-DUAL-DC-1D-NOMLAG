@@ -1,0 +1,139 @@
+---
+# L3LS Fabric Values - update these values with caution,
+# SOME CHANGES COULD BE DISRUPTIVE.
+
+dc_name: DC2
+
+# Define underlay and overlay routing protocol to be used
+underlay_routing_protocol: EBGP
+overlay_routing_protocol: EBGP
+
+# Enable vlan aware bundles
+vxlan_vlan_aware_bundles: false
+
+# bgp peer groups passwords
+bgp_peer_groups:
+  IPv4_UNDERLAY_PEERS:
+    password: "AQQvKeimxJu+uGQ/yYvv9w=="
+  EVPN_OVERLAY_PEERS:
+    password: "q+VNViP5i4rVjW1cxFv2wA=="
+  MLAG_IPv4_UNDERLAY_PEER:
+    password: "vnEaG8gMeQf3d3cN6PktXQ=="
+
+# Spine Switches
+spine:
+  defaults:
+    platform: vEOS-LAB
+    bgp_as: 65200
+    loopback_ipv4_pool: 192.168.221.0/24
+    bgp_defaults:
+      - 'no bgp default ipv4-unicast'
+      - 'distance bgp 20 200 200'
+      - 'graceful-restart restart-time 300'
+      - 'graceful-restart'
+#This is to make the spines route servers between DCs:
+    evpn_route_servers: 
+      - DC1-SPINE1
+  nodes:
+    DC2-SPINE1:
+      id: 1
+      mgmt_ip: 10.31.100.112/24
+
+# Leaf switch groups
+# A maximum of two nodes can form a leaf group
+# When two nodes are in a leaf group this will automatically form mlag pair
+
+l3leaf:
+  defaults:
+    platform: vEOS-LAB
+    loopback_ipv4_pool: 192.168.221.0/24
+    loopback_ipv4_offset: 2
+    vtep_loopback_ipv4_pool: 192.168.222.0/24
+    uplink_interfaces: ['Ethernet1']
+    uplink_switches: ['DC2-SPINE1']
+    uplink_ipv4_pool: 172.31.220.0/24
+    mlag_interfaces: [ Ethernet3, Ethernet4 ]
+    mlag_peer_ipv4_pool: 10.255.223.0/24
+    mlag_peer_l3_ipv4_pool: 10.255.224.0/24
+    virtual_router_mac_address: 00:1c:73:00:dc:01
+    evpn_services_l2_only: false 
+    mlag: false
+
+    bgp_defaults:
+      - 'no bgp default ipv4-unicast'
+      - 'distance bgp 20 200 200'
+      - 'graceful-restart restart-time 300'
+      - 'graceful-restart'
+    spanning_tree_mode: mstp
+    spanning_tree_priority: 16384
+  node_groups:
+    DC2_LEAF1:
+#      bgp_as: 65201
+      filter:
+         tenants: [ Tenant_A ]
+         tags: [ web ]          
+      nodes:
+        DC2-LEAF1A:
+          id: 1
+          bgp_as: 65201
+          mgmt_ip: 10.31.100.103/24
+          uplink_switch_interfaces: [Ethernet1]
+          # Node is acting as EVPN Multi-Domain Gateway | Optional.
+          # New BGP peer-group is generated between EVPN GWs in different domains or between GWs and Route Servers. Name can be changed under "bgp_peer_groups.evpn_overlay_core" variable
+          # L3 rechability for different EVPN GWs must be already in place, it is recommended to use DCI & L3 Edge if Route Servers and GWs are not defined under the same Ansible inventory.
+#          evpn_gateway:   
+#            # Define remote peers of the EVPN VXLAN Gateway. If the hostname can be found in the inventory, ip_address and BGP ASN will be automatically populated. Manual override takes precedence. If the peer's hostname can not be found in the inventory, ip_address and bgp_as must be defined.
+#            remote_peers:
+#              - hostname: DC1-LEAF1B
+#            #          ip_address: < Peering IP of remote Route Server >
+#            #          bgp_as: < BGP ASN of remote Route Server >    
+#            # Specific BGP EVPN Gateway functionality for route types 2 (MAC-IP), 3 (IMET) and 5 (IP-PREFIX) can be enabled separately as needed.
+#            evpn_l2:
+#              enabled: true
+#            evpn_l3:
+#              enabled: false 
+#              inter_domain: false
+
+        DC2-LEAF1B:
+          id: 2
+          bgp_as: 65202
+          mgmt_ip: 10.31.100.104/24
+          uplink_switch_interfaces: [Ethernet2]
+#this is to control if the leaf is gonna have l3 interfaces -symetric or not -asymetric:        
+          evpn_services_l2_only: false 
+
+
+
+
+#### Override for vEOS Lab Caveats ####
+
+# Disable update wait-for-convergence and update wait-for-install,
+# which is not supported in vEOS-LAB.
+# Refer to design guide
+
+# Update p2p mtu 9000 -> 1500
+p2p_uplinks_mtu: 1500
+
+# Adjust default bfd values
+bfd_multihop:
+  interval: 7000
+  min_rx: 7000
+  multiplier: 6
+
+# Ansible connectivity definitions
+# eAPI connectivity via HTTPS is specified (as opposed to CLI via SSH)
+ansible_connection: ansible.netcommon.httpapi
+# Specifies that we are indeed using Arista EOS
+ansible_network_os: arista.eos.eos
+# This user/password must exist on the switches to enable Ansible access
+ansible_user: ansible
+ansible_password: ansible
+# User escalation (to enter enable mode)
+ansible_become: true
+ansible_become_method: enable
+# Use SSL (HTTPS)
+ansible_httpapi_use_ssl: true
+# Do not try to validate certs
+ansible_httpapi_validate_certs: false
+
+

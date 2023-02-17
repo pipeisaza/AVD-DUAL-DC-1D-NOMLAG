@@ -1,0 +1,9 @@
+BGP summary information for VRF default
+Router identifier 192.168.211.4, local AS number 65101
+Neighbor               AS Session State AFI/SAFI                AFI/SAFI State   NLRI Rcd   NLRI Acc
+------------- ----------- ------------- ----------------------- -------------- ---------- ----------
+10.254.0.1          65201 Established   IPv4 Unicast            Negotiated              4          4
+10.254.0.3          65201 Established   IPv4 Unicast            Negotiated              4          4
+10.255.214.0        65101 Established   IPv4 Unicast            Negotiated              3          3
+172.31.210.2        65100 Established   IPv4 Unicast            Negotiated              1          1
+192.168.211.1       65100 Established   L2VPN EVPN              Negotiated             18         18

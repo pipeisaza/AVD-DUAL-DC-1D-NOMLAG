@@ -1,0 +1,148 @@
+---
+# DC1 Tenants Networks
+# Documentation of Tenant specific information - Vlans/VRFs
+tenants:
+  # Tenant A Specific Information - VRFs / VLANs
+  Tenant_A:
+    mac_vrf_vni_base: 10000
+    vrfs:
+      Tenant_A_OP_Zone:
+        vrf_vni: 1001
+        vtep_diagnostic:
+          loopback: 10
+          loopback_ip_range: 10.255.10.0/24
+        svis:
+          10:
+            name: Tenant_A_OP_Zone_10
+            tags: [opzone, app10]
+            enabled: true
+            ip_address_virtual: 10.1.10.1/24
+          11:
+            name: Tenant_A_OP_Zone_11
+            tags: [opzone, app11]
+            enabled: true
+            ip_address_virtual: 10.1.11.1/24    
+#there are use for route leaking between vrfs: 
+        additional_route_targets: 
+          - type: export 
+            address_family: evpn 
+            route_target: "1001:1002" 
+            # Nodes is optional. Default is all nodes where the VRF is defined. 
+#            nodes: [ DC1-LEAF1B ] 
+          - type: import 
+            address_family: evpn 
+            route_target: "1001:1002"
+
+# This will create IP routed interface inside VRF. Length of interfaces, nodes and ip_addresses and descriptions (if used) must match.
+        l3_interfaces:
+          - interfaces: [ Ethernet6 ]
+            ip_addresses: [ 1.1.1.1/24 ]
+            nodes: [ DC1-LEAF1A ]
+            description: TESTA_WAN1
+            enabled: true 
+            mtu: 9200
+            # EOS CLI rendered directly on the Ethernet interface in the final EOS configuration
+#           raw_eos_cli: |
+#              < multiline eos cli >
+#            # Custom structured config added under ethernet_interfaces.<interface> for eos_cli_config_gen
+#            structured_config: < dictionary >
+
+
+        # Dictionary of BGP peer definitions | Optional.
+        # This will configure BGP neighbors inside the tenant VRF for peering with external devices.
+        # The configured peer will automatically be activated for ipv4 or ipv6 address family based on the ip address.
+        # Note, only ipv4 and ipv6 address families are currently supported in eos_designs.
+        # For other address families, use custom_structured configuration with eos_cli_config_gen.
+
+        bgp_peers:
+          1.1.1.2:
+            peer_group: WAN1
+            remote_as: 65300
+            description: TEST_WAN1
+            nodes: [DC1-LEAF1A]
+
+
+      Tenant_A_WEB_Zone:
+        vrf_vni: 1002
+        vtep_diagnostic:
+          loopback: 20
+          loopback_ip_range: 10.255.20.0/24
+        svis:
+          20:
+            name: Tenant_A_WEB_Zone
+            tags: [web]
+            enabled: true
+            ip_address_virtual: 10.1.20.1/24
+        additional_route_targets:
+          - type: export
+            address_family: evpn
+            route_target: "1001:1002"
+            # Nodes is optional. Default is all nodes where the VRF is defined.
+#            nodes: [ DC1-LEAF1A ]
+          - type: import
+            address_family: evpn
+            route_target: "1001:1002"
+
+    l2vlans:
+      300:
+        vni_overide: 55300
+        name: Tenant_A_VMOTION
+        tags: [vmotion]
+      400:
+        vni_overide: 55400
+        name: Tenant_A_PAY
+        tags: [pay]
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

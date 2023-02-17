@@ -1,0 +1,20 @@
+Node Type,Node,Node Interface,Peer Type,Peer Node,Peer Interface,Node Interface Enabled
+l3leaf,DC1-LEAF1A,Ethernet1,spine,DC1-SPINE1,Ethernet1,True
+l3leaf,DC1-LEAF1A,Ethernet5,server,dc1-server03,Eth1,True
+l3leaf,DC1-LEAF1A,Ethernet7,firewall,dc1-fw1,eth0,True
+l3leaf,DC1-LEAF1A,Ethernet8,server,dc1-server01,Eth0,True
+l3leaf,DC1-LEAF1B,Ethernet1,spine,DC1-SPINE1,Ethernet2,True
+l3leaf,DC1-LEAF1B,Ethernet5,l3leaf,DC2-LEAF1A,Ethernet5,True
+l3leaf,DC1-LEAF1B,Ethernet6,l3leaf,DC2-LEAF1A,Ethernet6,True
+l3leaf,DC1-LEAF1B,Ethernet7,firewall,dc1-fw1,eth1,True
+l3leaf,DC1-LEAF1B,Ethernet8,server,dc1-server02,Eth1,True
+spine,DC1-SPINE1,Ethernet1,l3leaf,DC1-LEAF1A,Ethernet1,True
+spine,DC1-SPINE1,Ethernet2,l3leaf,DC1-LEAF1B,Ethernet1,True
+l3leaf,DC2-LEAF1A,Ethernet1,spine,DC2-SPINE1,Ethernet1,True
+l3leaf,DC2-LEAF1A,Ethernet5,l3leaf,DC1-LEAF1B,Ethernet5,True
+l3leaf,DC2-LEAF1A,Ethernet6,l3leaf,DC1-LEAF1B,Ethernet6,True
+l3leaf,DC2-LEAF1A,Ethernet8,server,dc2-server01,Eth0,True
+l3leaf,DC2-LEAF1B,Ethernet1,spine,DC2-SPINE1,Ethernet2,True
+l3leaf,DC2-LEAF1B,Ethernet8,server,dc2-server02,Eth1,True
+spine,DC2-SPINE1,Ethernet1,l3leaf,DC2-LEAF1A,Ethernet1,True
+spine,DC2-SPINE1,Ethernet2,l3leaf,DC2-LEAF1B,Ethernet1,True

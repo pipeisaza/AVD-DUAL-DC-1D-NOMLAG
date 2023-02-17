@@ -1,0 +1,17 @@
+---
+- name: create certificates on EOS devices
+  hosts: FABRIC
+  gather_facts: false
+  collections:
+    - arista.eos
+
+  tasks:
+    - name: set connection to use ssh
+      set_fact:
+        ansible_connection: network_cli
+      
+    - name: create key and cert
+      arista.eos.eos_command:
+        commands:
+        - security pki key generate rsa 4096 capikey.pem
+        - security pki certificate generate self-signed capi.pem key capikey.pem validity 3650 parameters common-name HOSTNAME subject-alternative-name dns HOSTNAME

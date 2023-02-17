@@ -1,0 +1,90 @@
+---
+all:
+  children:
+    CVP:
+      hosts:
+      
+        cv_ztp:
+          ansible_host: 10.31.100.4
+          ansible_user: root
+          ansible_password: arista123
+        cv_server:
+          ansible_httpapi_host: 10.31.100.4
+          ansible_host: 10.31.100.4
+          ansible_user: ansible
+          ansible_password: ansible
+          ansible_connection: httpapi
+          ansible_httpapi_use_ssl: true
+          ansible_httpapi_validate_certs: false
+          ansible_network_os: eos
+          ansible_httpapi_port: 443
+          # Configuration to get Virtual Env information
+          ansible_python_interpreter: $(which python3)
+
+    FABRIC:
+      children:
+        DC1_FABRIC:
+          children:
+            DC1_SPINES:
+              vars:
+                type: spine
+              hosts:
+                DC1-SPINE1:
+                  ansible_host: 10.31.100.111
+            DC1_LEAFS:
+              vars:
+                type: l3leaf
+              hosts:
+                DC1-LEAF1A:
+                  ansible_host: 10.31.100.101
+                DC1-LEAF1B:
+                  ansible_host: 10.31.100.102
+
+        DC2_FABRIC:
+          children:
+            DC2_SPINES:
+              vars:
+                type: spine
+              hosts:
+                DC2-SPINE1:
+                  ansible_host: 10.31.100.112
+            DC2_LEAFS:
+              vars:
+                type: l3leaf
+              hosts:
+                DC2-LEAF1A:
+                  ansible_host: 10.31.100.103
+                DC2-LEAF1B:
+                  ansible_host: 10.31.100.104
+ 
+          vars:
+            ansible_connection: httpapi
+            ansible_network_os: eos
+            ansible_user: ansible
+            # should use vault for passwords
+            ansible_ssh_pass: ansible
+            ansible_become: true
+            ansible_become_method: enable
+            ansible_httpapi_use_ssl: true
+            ansible_httpapi_validate_certs: false
+ 
+        TENANTS_NETWORKS:
+          children:
+            DC1_LEAFS:
+            DC2_LEAFS:
+ 
+        DC1_SERVERS:
+          children:
+            DC1_LEAFS:
+
+        DC2_SERVERS:
+          children:
+            DC2_LEAFS:
+
+    WAN_PROVIDERS:
+      hosts:
+        WAN1:
+        WAN2:
+        
+          
+
