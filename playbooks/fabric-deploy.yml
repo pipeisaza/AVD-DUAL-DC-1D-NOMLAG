@@ -3,6 +3,8 @@
   hosts: FABRIC
   connection: local
   gather_facts: false
+  vars_files:
+    - ./../inventory/group_vars/vault.yml
   collections:
     - arista.avd
     - arista.cvp
@@ -26,6 +28,8 @@
   hosts: cv_server
   connection: local
   gather_facts: false
+  vars_files:
+    - ./../inventory/group_vars/vault.yml
   collections:
     - arista.avd
     - arista.cvp
