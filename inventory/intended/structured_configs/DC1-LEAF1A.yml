@@ -96,6 +96,7 @@ name_server:
   nodes:
   - 100.127.255.118
   - 8.8.8.8
+  - 8.8.1.1
 spanning_tree:
   mode: mstp
   mst_instances:
