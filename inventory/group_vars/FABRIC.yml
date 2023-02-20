@@ -58,6 +58,7 @@ mgmt_gateway: 10.31.100.1
 name_servers:
   - 100.127.255.118
   - 8.8.8.8
+  - 8.8.4.4
 
 # NTP Servers IP or DNS name, first NTP server will be prefered, and sourced from Managment VRF
 custom_structured_configuration_ntp:
