@@ -121,6 +121,10 @@ local_users:
     privilege: 15
     role: network-admin
     sha512_password: $6$rZKcbIZ7iWGAWTUM$TCgDn1KcavS0s.OV8lacMTUkxTByfzcGlFlYUWroxYuU7M/9bIodhRO7nXGzMweUxvbk8mJmQl8Bh44cRktUj.
+  nomios:
+    privilege: 15
+    role: network-admin
+    sha512_password: $6$Dzu11L7yp9j3nCM9$FSptxMPyIL555OMO.ldnjDXgwZmrfMYwHSr0uznE5Qoqvd9a6UdjiFcJUhGLtvXVZR1r.A/iF5aAt50hf/EK4/
 vrfs:
   MGMT:
     ip_routing: false
